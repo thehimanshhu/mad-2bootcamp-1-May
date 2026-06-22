@@ -1,4 +1,3 @@
 # HouseHold service app 
 
-
-sdkfasdf
+This is my MAD2 BOOTCAMP project
