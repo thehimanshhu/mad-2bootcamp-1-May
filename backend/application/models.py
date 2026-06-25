@@ -12,6 +12,7 @@ class User(db.Model , UserMixin):
     mobile = db.Column(db.String , nullable = True)
     fs_uniquifier = db.Column(db.String, unique=True , nullable = False)
     roles = db.relationship("Role" ,secondary = "user_roles" , backref="users")
+    packages= db.relationship("Package" , backref="user")
     created_bookings = db.relationship("Booking" , foreign_keys="Booking.customer_id" , backref="customer")
     recived_bookings = db.relationship("Booking", foreign_keys="Booking.prof_id" , backref="professional")
 
@@ -44,4 +45,5 @@ class Booking(db.Model):
     package_id = db.Column(db.Integer ,db.ForeignKey("package.id"))
     prof_id= db.Column(db.Integer ,db.ForeignKey("user.id"))
     customer_id = db.Column(db.Integer ,db.ForeignKey("user.id"))
+    status=db.Column(db.String, nullable=False)
 

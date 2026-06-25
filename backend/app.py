@@ -18,14 +18,14 @@ def create_app():
     def unauthn_handler(mechanisms , headers):
         print(mechanisms)
         print(headers)
-        return {"message" : f"Please Provide correct {mechanisms[0]}"}
+        return {"message" : f"Please Provide correct {mechanisms[0]}"},401
     
     @app.security.unauthz_handler
     def unauthz_handler(func_name , params):
         print(func_name)
         print(params)
 
-        return {"message" : f"You don't have access to view the {params[0]} resource"}
+        return {"message" : f"You don't have access to view the {params[0]} resource"},403
     CORS(app)
     app.app_context().push()
     return app

@@ -36,16 +36,16 @@ with app.app_context():
     
     if Booking.query.count() == 0: 
         book1 = Booking(date = datetime.strptime("25-06-2026" ,"%d-%m-%Y" ).date() ,
-                        time = datetime.strptime("11:30" ,"%H:%M" ).time() , package_id = 1 , prof_id=2
+                        time = datetime.strptime("11:30" ,"%H:%M" ).time() , package_id = 1 , prof_id=2 , status="Booked"
                         , customer_id = 4 )
         book2 = Booking(date = datetime.strptime("26-06-2026" ,"%d-%m-%Y" ).date() ,
-                        time = datetime.strptime("10:30" ,"%H:%M" ).time() , package_id = 3 , prof_id=3
+                        time = datetime.strptime("10:30" ,"%H:%M" ).time() , package_id = 3 , prof_id=3 , status="Booked"
                         , customer_id = 4 )
         book3 = Booking(date = datetime.strptime("27-06-2026" ,"%d-%m-%Y" ).date() ,
-                        time = datetime.strptime("11:30" ,"%H:%M" ).time() , package_id = 2 , prof_id=2
+                        time = datetime.strptime("11:30" ,"%H:%M" ).time() , package_id = 2 , prof_id=2 ,status="Booked"
                         , customer_id = 5 )
         book4 = Booking(date = datetime.strptime("26-06-2026" ,"%d-%m-%Y" ).date() ,
-                        time = datetime.strptime("10:30" ,"%H:%M" ).time() , package_id = 4 , prof_id=3
+                        time = datetime.strptime("10:30" ,"%H:%M" ).time() , package_id = 4 , prof_id=3 , status="Booked"
                         , customer_id = 5 )
         db.session.add_all([book1,book2,book3,book4])
         db.session.commit()

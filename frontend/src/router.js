@@ -5,6 +5,8 @@ import Register from "./components/Register.vue"
 import AdminDashboard from "./components/Admin/Dashboard.vue"
 import CustomerDashboard from "./components/Customer/Dashboard.vue"
 import ProfessionalDashboard from "./components/Professional/Dashboard.vue"
+import LogOut from "./components/LogOut.vue"
+import CreatePackage from "./components/Professional/CreatePackage.vue"
 const routes = [
     {
         path : "/" , component : Home  
@@ -23,6 +25,12 @@ const routes = [
     },
     {
         path : "/professional/dashboard" , component: ProfessionalDashboard
+    },
+    {
+        path : "/logout" , component: LogOut
+    },
+    {
+        path : "/create-package" , component: CreatePackage
     }
 ]
 
