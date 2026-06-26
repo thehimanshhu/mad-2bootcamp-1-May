@@ -7,6 +7,8 @@ import CustomerDashboard from "./components/Customer/Dashboard.vue"
 import ProfessionalDashboard from "./components/Professional/Dashboard.vue"
 import LogOut from "./components/LogOut.vue"
 import CreatePackage from "./components/Professional/CreatePackage.vue"
+import ViewPackage from "./components/Professional/ViewPackage.vue"
+import ViewProfessional from "./components/Admin/viewProfessional.vue"
 const routes = [
     {
         path : "/" , component : Home  
@@ -31,6 +33,12 @@ const routes = [
     },
     {
         path : "/create-package" , component: CreatePackage
+    },
+    {
+        path : "/view-package/:id" , component: ViewPackage
+    },
+    {
+        path : "/view-professional/:id" , name:"ViewProfessional" , component: ViewProfessional
     }
 ]
 

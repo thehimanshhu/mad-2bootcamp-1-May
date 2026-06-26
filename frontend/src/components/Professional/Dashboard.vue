@@ -27,7 +27,7 @@
 
 
                         <td class="d-flex gap-2">
-                            <button class="btn btn-primary">View</button>
+                            <router-link :to="`/view-package/${pack.id}`" class="btn btn-primary">View</router-link>
                             <button class="btn btn-danger" @click="deletePack(pack.id)">Delete</button>
                         </td>
                     </tr>

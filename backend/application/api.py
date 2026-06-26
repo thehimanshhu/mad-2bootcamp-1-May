@@ -2,6 +2,7 @@ from flask import current_app as app
 from flask import request,render_template
 from .models import db, User,Role,Package,Booking
 from flask_security import auth_required , roles_required , current_user
+from datetime import datetime
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -57,7 +58,7 @@ def list_profs():
     print(current_user.email)
     profs = []
     for prof in prof_role.users:
-        profs.append({"name" : prof.name , "email" : prof.email})
+        profs.append({"id":prof.id ,  "name" : prof.name , "email" : prof.email})
     print(profs)
     return profs , 200
     
@@ -119,3 +120,40 @@ def delete_pacage():
         return {"message" : "Package not found"} ,404
     
 
+@app.route("/get-package" , methods=["GET"])
+def get_package():
+    id  = request.args.get("pack_id")
+    pack =  Package.query.filter_by(id = id).first()
+    p = {}
+    if pack :
+        p["id"] = pack.id
+        p["name"] = pack.name
+        p["price"] = pack.price
+        p["bookings"] = []
+        for booking in pack.bookings:
+            p["bookings"].append({"id" : booking.id , "date" : datetime.strftime(booking.date ,"%d-%m-%Y") , "time" :booking.time.strftime("%H:%M") , 
+                                  "customer_id" : booking.customer_id , "customer_name" : booking.customer.name ,
+                                  "customer_email" : booking.customer.email, "status":booking.status })
+            
+        print(p)
+        return p ,200   
+    else:
+        return {"message" : "package not found"} , 404
+    
+
+@app.route("/get-professional" , methods=["GET"])
+def get_professional():
+    prof_id= request.args.get("prof_id")
+    prof = User.query.filter_by(id = prof_id).first()
+    p = {}
+    if prof : 
+        p["id"] = prof.id,
+        p["name"] = prof.name
+        p["email"] = prof.email
+        p["packages"] = []
+        for pack in prof.packages:
+            p["packages"].append({"id" : pack.id , "name" : pack.name , "price" :pack.price})
+
+        return p , 200
+    else:
+        return {"message" : "professional Not found"}, 404
