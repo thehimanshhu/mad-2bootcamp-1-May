@@ -13,7 +13,8 @@
                         <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Search</a>
+
+                        <router-link :to="role ==='admin' ? '/search' : '#' " class="nav-link">Search</router-link>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Stats</a>
@@ -38,9 +39,15 @@ export default {
                 email: "",
                 password: ""
             },
-            message: null
+            message: null,
+            role: localStorage.getItem("role")
         }
     },
+    methods:{
+        hello(){
+            localStorage.getItem
+        }
+    }
     
 }
 

@@ -9,6 +9,8 @@ import LogOut from "./components/LogOut.vue"
 import CreatePackage from "./components/Professional/CreatePackage.vue"
 import ViewPackage from "./components/Professional/ViewPackage.vue"
 import ViewProfessional from "./components/Admin/viewProfessional.vue"
+import BookPackage from "./components/Customer/bookPackage.vue"
+import Search from "./components/Admin/Search.vue"
 const routes = [
     {
         path : "/" , component : Home  
@@ -39,6 +41,12 @@ const routes = [
     },
     {
         path : "/view-professional/:id" , name:"ViewProfessional" , component: ViewProfessional
+    },
+    {
+        path : "/book-package/:id"  , component: BookPackage
+    },
+    {
+        path : "/search"  , component: Search
     }
 ]
 
