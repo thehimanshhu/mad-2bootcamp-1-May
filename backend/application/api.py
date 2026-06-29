@@ -3,6 +3,7 @@ from flask import request,render_template
 from .models import db, User,Role,Package,Booking
 from flask_security import auth_required , roles_required , current_user
 from datetime import datetime
+from .task import add_together , download_csv
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -236,3 +237,32 @@ def search():
         return packs , 200
     else:
         return {"message" : "Wrong query type"} , 400
+    
+
+@app.route("/addnumber" , methods=["GET"])
+def addnumber():
+    a = request.args.get("a")
+    b = request.args.get("b")
+    result = add_together.delay(int(a) ,int( b))
+    print(result.id)
+    return {"message" : "task started" , "task_id" : result.id}
+
+
+from celery.result import AsyncResult
+
+@app.get("/result/<id>")
+def task_result(id: str) -> dict[str, object]:
+    result = AsyncResult(id)
+    return {
+        "ready": result.ready(),
+        "successful": result.successful(),
+        "value": result.result if result.ready() else None,
+    }
+
+
+@app.route("/downloadcsv" , methods=["GET"])
+@auth_required("token")
+@roles_required("customer")
+def customercsv():
+    task = download_csv.delay(current_user.id)
+    return {"message" : "csv export started" , "task_id" : task.id}

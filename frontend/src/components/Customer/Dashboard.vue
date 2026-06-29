@@ -4,6 +4,10 @@
         {{ message }}
     </div>
 
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary" @click="exportcsv()">Export Data</button>
+    </div>
+
     <div class="card mt-5 ms-5 me-5">
         <div class="card-header d-flex">
             Packages
@@ -81,7 +85,11 @@ export default {
         return {
             package_list: null,
             message: null,
-            bookings : null
+            bookings: null,
+            task_id: null ,
+            is_ready : false,
+            download_interval: null,
+            file_name:null
         }
     },
     methods: {
@@ -141,6 +149,60 @@ export default {
                 this.$router.go(0)
             }
         },
+        async exportcsv() {
+            try {
+                const response = await fetch("http://localhost:5000/downloadcsv", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authentication-Token": localStorage.getItem("token")
+                    },
+                })
+                const data = await response.json()
+                if (response.status == 200) {
+                    this.task_id = data.task_id
+                     this.download_interval = setInterval(() => {
+                        this.pollforcsv()
+                        console.log("polling")
+                    }, 2000);
+                   
+                }
+                else if (response.status == 401) {
+                    console.log("you are not logged in please login")
+                    this.$router.push("/logout")
+                }
+                else if (response.status == 403) {
+                    console.log("you don't have access to view this resource.")
+                    this.$router.push("/logout")
+                }
+
+            } catch (error) {
+                console.log(error.message)
+            }
+        },
+        async pollforcsv() {
+            const response = await fetch(`http://localhost:5000/result/${this.task_id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authentication-Token": localStorage.getItem("token")
+                },
+            })
+            const data = await response.json()
+            if (response.status == 200) {
+                    if(data.ready == true ){
+                        this.is_ready=true
+                        this.file_name = data.value
+                    }
+            }
+            if (this.is_ready){
+                clearInterval(this.download_interval)
+                console.log("done")
+                console.log(this.file_name)
+                window.location.href = `http://localhost:5000/static/${this.file_name}`
+            }
+
+        }
 
     },
     components: {

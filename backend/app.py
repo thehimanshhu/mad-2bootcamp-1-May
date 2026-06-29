@@ -3,9 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from application.models import db,User,Role
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_cors import CORS
-
+from application.celery_init import celery_init_app
 def create_app():
-    app = Flask(__name__ , template_folder="../frontend_cdn" , static_folder="../frontend_cdn")
+    app = Flask(__name__ )
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydb.sqlite3"
     app.config["SECRET_KEY"] = "mysecretkey"
     # app.config["SECURITY_PASSWORD_HASH"] = "argon2"
@@ -31,6 +31,9 @@ def create_app():
     return app
 
 app  = create_app()
+
+celery = celery_init_app(app)
+
 from application.api import *
 from application.inital_data import *
 
