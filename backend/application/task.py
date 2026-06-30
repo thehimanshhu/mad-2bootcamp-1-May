@@ -2,6 +2,8 @@ from celery import shared_task
 import time
 from .models import db, User, Booking
 import csv
+from datetime import datetime
+
 @shared_task(name = "add" , ignore_result=False)
 def add_together(a, b) -> int:
     time.sleep(20)
@@ -22,4 +24,15 @@ def download_csv(id):
     return filename
 
         
+from .utils import prepare_template
+from .mail import send_email
+@shared_task(name="admin-monthly-report" , ignore_result=True)
+def admin_report():
+    start_date = datetime.strptime("01-06-2026", "%d-%m-%Y").date()
+    end_date = datetime.strptime("30-06-2026", "%d-%m-%Y").date()
+    bookings= Booking.query.filter(Booking.date.between(start_date,end_date)).all()
+    data = { "username" : "Admin" , "bookings" : bookings}
+    output  = prepare_template("./templates/admin-mail.html" ,data )
+    send_email("admin@gmail.com" ,"Monthely Activity Report for Jun 2026" , output )
+    return "Done"
 

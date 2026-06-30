@@ -4,6 +4,9 @@ from .models import db, User,Role,Package,Booking
 from flask_security import auth_required , roles_required , current_user
 from datetime import datetime
 from .task import add_together , download_csv
+from .cache import cache
+
+from random import randint
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -154,6 +157,7 @@ def get_package():
     
 
 @app.route("/get-professional" , methods=["GET"])
+@cache.cached(20)
 def get_professional():
     prof_id= request.args.get("prof_id")
     prof = User.query.filter_by(id = prof_id).first()
@@ -266,3 +270,12 @@ def task_result(id: str) -> dict[str, object]:
 def customercsv():
     task = download_csv.delay(current_user.id)
     return {"message" : "csv export started" , "task_id" : task.id}
+
+
+
+
+
+@app.route("/random" , methods =["GET"])
+@cache.cached(30)
+def random():
+    return str(randint(1, 100))
